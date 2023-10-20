@@ -3,7 +3,7 @@
     <div class="table__head">
       <ButtonBase class="table__add" :variant="'secondary'">Добавить товар</ButtonBase>
     </div>
-    <div class="table__body" v-if="productPaginated.length > 0">
+    <div class="table__body" v-if="getProductsPaginated(currentPage, limit).length > 0">
       <table class="table__component">
         <tr>
           <th class="table__td table__td_type_heading">Название товара</th>
@@ -13,7 +13,7 @@
           <th class="table__td table__td_type_heading">Фото</th>
           <th class="table__td table__td_type_heading"></th>
         </tr>
-        <tr v-for="product in productPaginated" :key="product.id">
+        <tr v-for="product in getProductsPaginated(currentPage, limit)" :key="product.id">
           <td class="table__td">{{ product.title }}</td>
           <td class="table__td">{{ product.category }}</td>
           <td class="table__td">{{ product.price }}</td>
@@ -45,14 +45,17 @@
     </div>
     <div class="table__fallback" v-else>
       <div class="table__heading">Товары не найдены</div>
-      <ButtonBase class="table__create" :variant="'primary'">Заполнить данными</ButtonBase>
+      <ButtonBase class="table__create" @click="createMocData" :variant="'primary'"
+        >Заполнить данными</ButtonBase
+      >
     </div>
   </div>
 </template>
 
 <script>
-import { computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useProductStore } from '@/store/productStore.js'
 import EditIcon from '@/components/icons/EditIcon.vue'
 import DeleteIcon from '@/components/icons/DeleteIcon.vue'
 import IconBtn from '@/components/ui/IconBtn.vue'
@@ -67,39 +70,100 @@ export default {
     PaginationBase
   },
   setup() {
-    const store = useStore()
-    const products = computed(() => store.state.product.products)
-    const limit = computed(() => store.state.product.limit)
-    const currentPage = computed(() => store.state.product.page)
-    const totalPages = computed(() => store.state.product.totalPages)
+    const store = useProductStore()
+    // const products = store.products
+    const setProducts = store.setProducts
+    const { getProductsPaginated } = storeToRefs(store)
 
-    const setTotalPages = () => {
-      store.commit('product/setTotalPages', Math.ceil(products.value.length / 2))
-    }
+    const limit = ref(2)
+    const currentPage = ref(1)
+    const totalPages = ref(1)
 
-    const productPaginated = computed(() =>
-      products.value.filter((item, index) => {
-        if (currentPage.value === 1) {
-          return index >= currentPage.value - 1 && index < currentPage.value * limit.value
-        } else {
-          return (
-            index >= (currentPage.value - 1) * limit.value &&
-            index < currentPage.value * limit.value
-          )
+    onMounted(() => {
+      const data = localStorage.getItem('vue_inventroy_products')
+      if (data) {
+        const parcedData = JSON.parse(data)
+        setProducts(parcedData)
+        totalPages.value = Math.ceil(parcedData.length / limit.value)
+      }
+    })
+    const createMocData = () => {
+      const data = [
+        {
+          id: 'vv-1',
+          title: 'Product-1',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'Category-1',
+          price: '200',
+          quantity: '10',
+          photo:
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+        },
+        {
+          id: 'vv-2',
+          title: 'Product-2',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'Category-1',
+          price: '200',
+          quantity: '10',
+          photo:
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+        },
+        {
+          id: 'vv-3',
+          title: 'Product-3',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'Category-1',
+          price: '200',
+          quantity: '10',
+          photo:
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+        },
+        {
+          id: 'vv-4',
+          title: 'Product-4',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'Category-1',
+          price: '200',
+          quantity: '10',
+          photo:
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+        },
+        {
+          id: 'vv-5',
+          title: 'Product-5',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'Category-1',
+          price: '200',
+          quantity: '10',
+          photo:
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+        },
+        {
+          id: 'vv-6',
+          title: 'Product-6',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'Category-1',
+          price: '200',
+          quantity: '10',
+          photo:
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
         }
-      })
-    )
-
-    onMounted(setTotalPages)
+      ]
+      localStorage.setItem('vue_inventroy_products', JSON.stringify(data))
+      setProducts(data)
+      totalPages.value = Math.ceil(data.length / limit.value)
+    }
     const changePage = (page) => {
-      store.commit('product/setPage', page)
-      // store.commit('product/setPage', page)
+      currentPage.value = page
     }
     return {
-      productPaginated,
+      getProductsPaginated,
       changePage,
+      limit,
       totalPages,
-      currentPage
+      currentPage,
+      createMocData
     }
   }
 }

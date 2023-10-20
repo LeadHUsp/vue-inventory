@@ -5,7 +5,7 @@
         <div class="header__logo">Спортивный инвентарь</div>
         <div class="header__nav">
           <div class="header__item">
-            <RouterLink class="header__link" to="/">Список товаров</RouterLink>
+            <RouterLink class="header__link" to="/">К списку товаров</RouterLink>
           </div>
         </div>
       </div>
