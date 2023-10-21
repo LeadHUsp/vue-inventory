@@ -1,7 +1,17 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import { onMounted } from 'vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import { useProductStore } from '@/store/productStore.js'
+const store = useProductStore()
+onMounted(() => {
+  const data = localStorage.getItem('vue_inventroy_products')
+  if (data) {
+    const parcedData = JSON.parse(data)
+    store.setProducts(parcedData)
+  }
+})
 </script>
 
 <template>

@@ -29,6 +29,7 @@ export default {
   color: #fff;
   &__grid {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
   }
   &__logo {
@@ -36,11 +37,21 @@ export default {
     font-weight: bold;
     font-size: 22px;
     text-align: center;
+    @media (max-width: 575px) {
+      width: 100%;
+      font-size: 18px;
+    }
   }
   &__nav {
     margin-left: auto;
     display: flex;
     flex-wrap: wrap;
+    @media (max-width: 575px) {
+      padding-top: 10px;
+      width: 100%;
+      margin-left: initial;
+      justify-content: center;
+    }
   }
   &__item {
     padding: 5px;
@@ -54,6 +65,9 @@ export default {
       &:hover {
         color: $secondary;
       }
+    }
+    @media (max-width: 575px) {
+      font-size: 16px;
     }
   }
 }

@@ -35,11 +35,38 @@ export const useProductStore = defineStore('productStore', {
           }
         })
       }
+    },
+    getProductById: (state) => {
+      return (id) => {
+        return [...state.products].filter((item) => item.id === id)
+      }
+    },
+    getCategoryById: (state) => {
+      return (id) => {
+        return [...state.categories].filter((item) => item.id === id)
+      }
     }
   },
   actions: {
     setProducts(data) {
       this.products = data
+    },
+    deleteProduct(id) {
+      this.products = [...this.products].filter((item) => item.id !== id)
+    },
+    createProduct(data) {
+      this.products = [...this.products, data]
+    },
+    updateProductById(data) {
+      this.products = [
+        ...this.products.map((el) => {
+          if (el.id === data.id) {
+            return data
+          } else {
+            return el
+          }
+        })
+      ]
     }
   }
 })

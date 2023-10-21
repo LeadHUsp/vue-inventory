@@ -1,5 +1,6 @@
 <template>
-  <button
+  <component
+    :is="tag_name"
     class="btn-base"
     :class="[
       {
@@ -11,7 +12,7 @@
     ]"
   >
     <slot></slot>
-  </button>
+  </component>
 </template>
 
 <script>
@@ -22,6 +23,10 @@ export default {
       validator(value) {
         return ['primary', 'secondary'].includes(value)
       }
+    },
+    tag_name: {
+      type: String,
+      default: 'button'
     }
   }
 }
@@ -34,6 +39,7 @@ export default {
   padding: 12px 30px;
   font-weight: 600;
   border-radius: 10px;
+  text-align: center;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;

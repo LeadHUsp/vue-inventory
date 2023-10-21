@@ -1,11 +1,14 @@
 <template>
-  <button class="icon-btn"><slot></slot></button>
+  <component :is="tag_name" class="icon-btn"><slot></slot></component>
 </template>
 
 <script>
 export default {
-  setup() {
-    return {}
+  props: {
+    tag_name: {
+      type: String,
+      default: 'button'
+    }
   }
 }
 </script>
