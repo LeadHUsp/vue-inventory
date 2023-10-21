@@ -11,6 +11,11 @@ onMounted(() => {
     const parcedData = JSON.parse(data)
     store.setProducts(parcedData)
   }
+  store.$subscribe((mutation, state) => {
+    if (mutation.type === 'direct' && mutation.storeId === 'productStore') {
+      localStorage.setItem('vue_inventroy_products', JSON.stringify(state.products))
+    }
+  })
 })
 </script>
 

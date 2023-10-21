@@ -175,13 +175,11 @@ export default {
           ]
         }
       ]
-      localStorage.setItem('vue_inventroy_products', JSON.stringify(data))
       setProducts(data)
       totalPages.value = Math.ceil(data.length / limit.value)
     }
     const deleteProduct = (id) => {
       store.deleteProduct(id)
-      localStorage.setItem('vue_inventroy_products', JSON.stringify(store.products))
     }
     const changePage = (page) => {
       currentPage.value = page
