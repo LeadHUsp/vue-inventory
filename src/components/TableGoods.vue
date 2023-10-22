@@ -33,6 +33,11 @@
           </td>
           <td class="table__td table__td_type_actions">
             <div class="table__actions">
+              <RouterLink :to="`/product/${product.id}`" class="table__btn table__btn_fill_blue">
+                <IconBtn :tag_name="'span'">
+                  <ViewIcon />
+                </IconBtn>
+              </RouterLink>
               <RouterLink :to="`/update/${product.id}`" class="table__btn table__btn_fill_green">
                 <IconBtn :tag_name="'span'">
                   <EditIcon />
@@ -71,6 +76,7 @@ import { Navigation } from 'swiper/modules'
 import { useProductStore } from '@/store/productStore.js'
 import EditIcon from '@/components/icons/EditIcon.vue'
 import DeleteIcon from '@/components/icons/DeleteIcon.vue'
+import ViewIcon from '@/components/icons/ViewIcon.vue'
 import IconBtn from '@/components/ui/IconBtn.vue'
 import ButtonBase from '@/components/ui/ButtonBase.vue'
 import PaginationBase from '@/components/ui/PaginationBase.vue'
@@ -83,7 +89,8 @@ export default {
     ButtonBase,
     PaginationBase,
     Swiper,
-    SwiperSlide
+    SwiperSlide,
+    ViewIcon
   },
   setup() {
     const store = useProductStore()
@@ -200,32 +207,32 @@ export default {
 </script>
 
 <style lang="scss">
+.swiper-button-next,
+.swiper-button-prev {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 30px;
+  background-color: #424242a9;
+  transform: none;
+  margin-top: 0;
+  &:after {
+    font-size: 20px;
+    color: #fff;
+  }
+}
+.swiper-button-next {
+  right: 0;
+}
+.swiper-button-prev {
+  left: 0;
+}
 .table {
   width: 100%;
   max-width: 1400px;
   &__slider {
     width: 200px;
-    .swiper-button-next,
-    .swiper-button-prev {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      height: 100%;
-      width: 30px;
-      background-color: #424242a9;
-      transform: none;
-      margin-top: 0;
-      &:after {
-        font-size: 20px;
-        color: #fff;
-      }
-    }
-    .swiper-button-next {
-      right: 0;
-    }
-    .swiper-button-prev {
-      left: 0;
-    }
   }
   &__component {
     width: 100%;
@@ -279,6 +286,7 @@ export default {
   }
   &__actions {
     display: flex;
+    align-items: center;
     gap: 10px;
   }
   &__create {
@@ -297,6 +305,14 @@ export default {
     width: 20px;
     height: 20px;
     transition: fill 0.3s ease;
+    &_fill_blue {
+      fill: #087fee;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          fill: $primary;
+        }
+      }
+    }
     &_fill_green {
       fill: #62b662;
       @media (hover: hover) and (pointer: fine) {

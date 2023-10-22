@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useForm, FieldArray } from 'vee-validate'
 import * as yup from 'yup'
 import { v4 as uuid } from 'uuid'
@@ -7,6 +7,7 @@ import TextField from '@/components/ui/TextField.vue'
 import TextArea from '@/components/ui/TextArea.vue'
 import ButtonBase from '@/components/ui/ButtonBase.vue'
 import SelectField from '@/components/ui/SelectField.vue'
+import DialogModal from '@/components/ui/DialogModal.vue'
 
 const props = defineProps({
   edit_data: {
@@ -21,6 +22,7 @@ const props = defineProps({
     required: true
   }
 })
+
 const emit = defineEmits(['create_product'])
 let initialData = {
   id: uuid(),
@@ -31,11 +33,14 @@ let initialData = {
   category: null,
   photo: []
 }
+const dialogIsVisible = ref(false)
+const createMode = ref(true)
 const categories = props.categories.map((el) => {
   return { ...el, ...{ value: el.id } }
 })
 onMounted(() => {
   if (props.edit_data) {
+    createMode.value = false
     initialData = {
       ...initialData,
       ...props.edit_data
@@ -72,10 +77,12 @@ const { handleSubmit, setValues } = useForm({
       })
       .test('is-exist', 'Товар с таким именем уже существует', (value) => {
         let flag = true
-        for (const item of props.products) {
-          if (item.title.trim().toLocaleLowerCase() === value.trim().toLocaleLowerCase()) {
-            flag = false
-            break
+        if (createMode.value) {
+          for (const item of props.products) {
+            if (item.title.trim().toLocaleLowerCase() === value.trim().toLocaleLowerCase()) {
+              flag = false
+              break
+            }
           }
         }
         return flag
@@ -88,15 +95,21 @@ const { handleSubmit, setValues } = useForm({
   })
 })
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values)
+const onSubmit = handleSubmit((values, actions) => {
   emit('create_product', values)
+  dialogIsVisible.value = true
+  console.log(props.edit_data)
+  if (!props.edit_data) {
+    actions.resetForm()
+    actions.setFieldValue('id', uuid())
+  }
 })
 </script>
 
 <template>
   <div class="create-page">
-    <div class="create-page__title">Создание товара</div>
+    <div class="create-page__title" v-if="createMode">Создание товара</div>
+    <div class="create-page__title" v-else>Обновление товара</div>
     <form class="create-page__form" @submit.prevent="onSubmit">
       <div class="create-page__group">
         <div class="create-page__box create-page__box_w70">
@@ -147,11 +160,52 @@ const onSubmit = handleSubmit((values) => {
         </div>
       </div>
       <div class="create-page__footer">
-        <ButtonBase class="create-page__submit" type="submit" :variant="'secondary'"
+        <ButtonBase
+          v-if="createMode"
+          class="create-page__submit"
+          type="submit"
+          :variant="'secondary'"
           >Создать товар</ButtonBase
+        >
+        <ButtonBase v-else class="create-page__submit" type="submit" :variant="'secondary'"
+          >Обновить товар</ButtonBase
         >
       </div>
     </form>
+    <DialogModal v-model:show="dialogIsVisible">
+      <div class="dialog-message">
+        <div class="dialog-message__item" v-if="createMode">
+          <div class="dialog-message__title">Товар создан</div>
+          <div class="dialog-message__box">
+            <RouterLink to="/">
+              <ButtonBase :variant="'secondary'" :tag_name="'span'"
+                >Вернуться к списку товаров</ButtonBase
+              >
+            </RouterLink>
+          </div>
+          <div class="dialog-message__box">
+            <ButtonBase :variant="'primary'" @click="dialogIsVisible = false"
+              >Создать ещё один товар</ButtonBase
+            >
+          </div>
+        </div>
+        <div class="dialog-message__item" v-else>
+          <div class="dialog-message__title">Товар обновлен</div>
+          <div class="dialog-message__box">
+            <RouterLink to="/">
+              <ButtonBase :variant="'secondary'" :tag_name="'span'"
+                >Вернуться к списку товаров</ButtonBase
+              >
+            </RouterLink>
+          </div>
+          <div class="dialog-message__box">
+            <ButtonBase :variant="'primary'" @click="dialogIsVisible = false"
+              >Вернуться к редактированию текущего товара</ButtonBase
+            >
+          </div>
+        </div>
+      </div>
+    </DialogModal>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -187,6 +241,20 @@ const onSubmit = handleSubmit((values) => {
     &_w30 {
       width: 30%;
     }
+    @media (max-width: 850px) {
+      &_w70 {
+        width: 100%;
+      }
+      &_w30 {
+        width: 100%;
+        max-width: 400px;
+      }
+    }
+    @media (max-width: 600px) {
+      &_w50 {
+        width: 100%;
+      }
+    }
   }
   &__repeat {
     margin-top: 15px;
@@ -196,6 +264,27 @@ const onSubmit = handleSubmit((values) => {
   }
   &__submit {
     max-width: 250px;
+  }
+  &__footer {
+    padding-top: 40px;
+    text-align: center;
+  }
+}
+.dialog-message {
+  &__title {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 30px;
+  }
+  &__group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -5px;
+  }
+  &__box {
+    // width: 50%;
+    padding: 10px 0;
   }
 }
 </style>
