@@ -180,6 +180,78 @@ export default {
             'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
             'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
           ]
+        },
+        {
+          id: 'vv-7',
+          title: 'Product-7',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'vc-1',
+          price: '200',
+          quantity: '10',
+          photo: [
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+          ]
+        },
+        {
+          id: 'vv-8',
+          title: 'Product-8',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'vc-1',
+          price: '200',
+          quantity: '10',
+          photo: [
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+          ]
+        },
+        {
+          id: 'vv-9',
+          title: 'Product-9',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'vc-1',
+          price: '200',
+          quantity: '10',
+          photo: [
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+          ]
+        },
+        {
+          id: 'vv-10',
+          title: 'Product-10',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'vc-1',
+          price: '200',
+          quantity: '10',
+          photo: [
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+          ]
+        },
+        {
+          id: 'vv-11',
+          title: 'Product-11',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'vc-1',
+          price: '200',
+          quantity: '10',
+          photo: [
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+          ]
+        },
+        {
+          id: 'vv-12',
+          title: 'Product-12',
+          description: 'nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet',
+          category: 'vc-1',
+          price: '200',
+          quantity: '10',
+          photo: [
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg',
+            'https://catherineasquithgallery.com/uploads/posts/2021-03/1614672563_6-p-sportivnii-inventar-fon-6.jpg'
+          ]
         }
       ]
       setProducts(data)
@@ -187,6 +259,7 @@ export default {
     }
     const deleteProduct = (id) => {
       store.deleteProduct(id)
+      totalPages.value = Math.ceil(store.products.length / limit.value)
     }
     const changePage = (page) => {
       currentPage.value = page
