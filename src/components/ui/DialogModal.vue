@@ -12,7 +12,7 @@ const props = defineProps({
   show: {
     type: Boolean,
     default: false,
-    requared: true
+    required: true
   }
 })
 

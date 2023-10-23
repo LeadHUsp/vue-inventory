@@ -19,11 +19,11 @@ export default {
   props: {
     totalPages: {
       type: Number,
-      requared: true
+      required: true
     },
     currentPage: {
       type: Number,
-      requared: true
+      required: true
     }
   }
 }
